@@ -46,11 +46,15 @@ def compute_interpretability_metric(latent_codes_input, attributes, attr_list):
     latent_codes = latent_codes_input
     for i, attr_name in tqdm(enumerate(attr_list)):
         if attr_name == 'MIC E.coli' or attr_name == 'MIC S.aureus':
+            latent_codes = latent_codes_input
             finite_mask = np.isfinite(attributes[:,i])
             latent_codes = latent_codes_input[finite_mask,:]
             attr_labels = attributes[finite_mask, i]
         else:
+            latent_codes = latent_codes_input
             attr_labels = attributes[:, i]
+        # print(f'latent_codes shape = {latent_codes.shape}')
+        # print(f'attr_labels shape = {attr_labels.shape}')
         mutual_info = mutual_info_regression(latent_codes, attr_labels)
         dim = np.argmax(mutual_info)
 
